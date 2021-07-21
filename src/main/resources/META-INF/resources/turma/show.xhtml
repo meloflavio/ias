@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/index.xhtml"
+>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <div class="box box-primary">
+
+                    <div class="box-header with-border">
+                        <h2> Avaliação  </h2>
+                    </div>
+
+                    <div class="box-body with-border">
+                    <div class="ui-fluid">
+                        <fieldset>
+                            <legend>Dados do Item</legend>
+                            <!--                    <h:panelGrid columns="2" cellpadding="7">-->
+                            <p:panelGrid id="capaPanel"
+                                         columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid"
+                            >
+                                <h:outputLabel style="font-weight: bold" for="name" value="Nome"/>
+                                <h:outputText id="name" value="#{turmaController.subject.nome}"/>
+
+
+                                <h:outputLabel style="font-weight: bold" for="dataInicio" value="Data Início"/>
+                                <h:outputText id="dataInicio" value="#{turmaController.subject.dataInicio}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="dataFim" value="Data Fim"/>
+                                <h:outputText id="dataFim" value="#{turmaController.subject.dataFim}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="instrutor" value="Instrutor"/>
+                                <h:outputText id="instrutor" value="#{turmaController.subject.instrutor}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="disciplina" value="Disciplina"/>
+                                <h:outputText id="disciplina" value="#{turmaController.subject.disciplina.descricao}"/>
+
+                            </p:panelGrid>
+                            <fieldset>
+                                <legend>Participantes</legend>
+                                <p:dataTable value="#{turmaController.subject.participantes}"
+                                             var="participanteR"
+                                             id="tabelaParticipantes"
+                                             emptyMessage="Nenhum registro encontrado">
+                                    <p:column>
+                                        <f:facet name="header">Nome</f:facet>
+                                        <h:outputText value="#{participanteR.nome}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </fieldset>
+                        </fieldset>
+                    </div>
+                        <div id="main-buttons" class="hidden-sm hidden-xs">
+                            <p:commandButton value="Excluir" process="@this"
+                                             action="#{turmaController.delete(turmaController.subject)}"
+                                             icon="fa fa-trash"
+                                             styleClass="btn-danger">
+                            </p:commandButton>
+                            <p:spacer width="5"/>
+
+                            <p:commandButton value="Voltar" immediate="true"
+                                             action="#{turmaController.listSubjects()}"
+                                             process="@this"
+                                             icon="fa fa-close"/>
+                        </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

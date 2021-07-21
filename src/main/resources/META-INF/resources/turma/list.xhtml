@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{turmaController.listSubjects()}" />
+    </ui:define>
+    <ui:define name="body">
+        <h:form>
+            <div class="box box-primary">
+                <div class="box-header with-border" style="padding-left: 25px">
+                    <h2><i class="fa fa-bar-chart"></i> Avaliações </h2>
+                </div>
+
+                <div class="box-body with-border">
+                    <p:dataTable id="subjectTable"
+                                 var="subjectR"
+                                 value="#{turmaController.subjectList}"
+                                 selectionMode="multiple"
+                                 selection="#{turmaController.subjectSelected}"
+                                 rowKey="#{subjectR.id}"  paginator="true"
+                                 emptyMessage="Nenhum registro encontrado"
+                    >
+
+                        <p:column headerText="ID" styleClass="col-md-3"  sortBy="#{subjectR.id}">
+                            <h:outputText style="text-align: center!important;" value="#{subjectR.id}" />
+                        </p:column>
+
+                        <p:column headerText="Avaliado/Competência" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.nome}" />
+                        </p:column>
+
+                        <p:column headerText="Etapa" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.disciplina.descricao}" />
+                        </p:column>
+
+                        <p:column headerText="Avaliado" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.isAvaliada()}" />
+                        </p:column>
+
+                        <p:column styleClass="col-md-3">
+<!--                            <h:commandButton action = "#{turmaController.show(subjectR.id)}"  value="Exibir" icon="fa fa-file" class="btn btm-warning">-->
+<!--                            </h:commandButton>-->
+                            <h:commandButton action = "#{turmaController.avaliar(subjectR.id)}"  value="Avaliar" icon="fa fa-check" class="btn btn-primary">
+                            </h:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

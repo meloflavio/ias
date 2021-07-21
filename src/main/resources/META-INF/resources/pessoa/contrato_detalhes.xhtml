@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:focus/>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+
+                    <div class="box-header with-border">
+                        <h2><i class="fa fa-users"></i> Detalhes contrato de profissional </h2>
+                    </div>
+
+
+                    <div class="ui-fluid">
+                        <p:panelGrid id="contractDetais" columns="2" layout="grid" columnClasses="ui-md-2,ui-md-10"
+                                     contentStyleClass="ui-fluid">
+                            <p:outputLabel value="Dono"/>
+                            <p:outputLabel value="#{pessoaController.detalhesProfissional.value1}"/>
+
+                            <p:outputLabel value="Endereço do Contrato"/>
+                            <p:outputLabel value="#{pessoaController.detalhesProfissional.value2}"/>
+
+                            <p:outputLabel value="Nome"/>
+                            <p:outputLabel value="#{pessoaController.detalhesProfissional.value3}"/>
+
+                            <p:outputLabel value="CPF"/>
+                            <p:outputLabel value="#{pessoaController.detalhesProfissional.value4}"/>
+
+                            <p:outputLabel value="Registro Médico"/>
+                            <p:outputLabel value="#{pessoaController.detalhesProfissional.value5}"/>
+                        </p:panelGrid>
+                    </div>
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{pessoaController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

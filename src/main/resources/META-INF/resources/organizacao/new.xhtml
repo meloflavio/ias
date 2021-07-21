@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{organizacaoController.isReload()}"/>
+    </ui:define>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:focus/>
+
+            <div class="box box-primary">
+
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-building"></i> Cadastro Organização </h2>
+                </div>
+                <div class="box-body with-border">
+                    <div class="ui-fluid">
+                        <h:inputHidden value="#{organizacaoController.subject.id}"/>
+                        <p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-md-2,ui-md-10"
+                                     contentStyleClass="ui-fluid">
+                            <p:outputLabel value="ID" for="id" rendered="#{organizacaoController.edit}"/>
+                            <p:inputText id="id" value="#{organizacaoController.subject.id}"
+                                         rendered="#{organizacaoController.edit}" disabled="true"/>
+
+                            <p:outputLabel value="Nome" for="name"/>
+                            <p:inputText id="name" value="#{organizacaoController.subject.nome}"
+                                         placeholder="Digite o nome da organização" required="true"/>
+
+                            <p:outputLabel value="Descrição" for="descricao"/>
+                            <p:inputText id="descricao" value="#{organizacaoController.subject.descricao}"
+                                         placeholder="digite a descrição da organização"/>
+
+                            <p:outputLabel value="CNPJ" for="cnpj"/>
+                            <p:inputMask id="cnpj"
+                                         mask="99.999.999/0001-99"
+                                         value="#{organizacaoController.subject.cnpj}"
+                                         required="true"
+                                         placeholder="Digite os números do CNPJ"/>
+
+                            <p:outputLabel value="Número de Registro" for="numeroRegistro"/>
+                            <p:inputText id="numeroRegistro"
+                                         placeholder="Digite os números do registro"
+                                         value="#{organizacaoController.subject.numeroRegistro}"/>
+
+                            <p:outputLabel value="E-mail" for="email"/>
+                            <p:inputText id="email"
+                                         placeholder="Digite seu e-mail"
+                                         value="#{organizacaoController.subject.email}"/>
+
+                            <p:outputLabel value="Telefone" for="telefone"/>
+                            <p:inputText id="telefone"
+                                         placeholder="Digite seu telefone"
+                                         value="#{organizacaoController.subject.telefone}"/>
+
+                            <p:outputLabel value="Logo: " for="fileUpload"/>
+                            <p:fileUpload id="fileUpload" fileUploadListener="#{organizacaoController.upload}"
+                                          allowTypes="/(\.|\/)(jpg|JPG|JPEG|jpeg|png|PNG)$/"
+                                          update="pnlImage" skinSimple="true" auto="true"
+                                          mode="advanced" label="Escolher"/>
+
+                            <h:panelGroup id="pnlImage" layout="block" styleClass="fl_container_24">
+                                <p:outputLabel value="Previsualização Logo: " for="fileUpload"/>
+                                <h:panelGroup id="pnlImageFoto">
+                                    <h:graphicImage id="imagen" value="#{organizacaoController.subject.logo}"
+                                                    width="200" height="200"
+                                                    styleClass="ui-expanded-widget-horizontal"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </p:panelGrid>
+                        <p:fieldset legend="Endereços" id="enderecos">
+                            <h:form id="enderecosForm">
+                                <p:outputLabel value="Cidade:" for="localidade"/>
+                                <p:inputText id="localidade"
+                                             value="#{organizacaoController.novoEndereco.localidade}"
+                                             placeholder="digite o nome da sua cidade"
+                                />
+
+                                <h:outputLabel value="País: " for="pais"/>
+                                <p:inputText id="pais"
+                                             placeholder="digite o seu país"
+                                             value="#{organizacaoController.novoEndereco.pais}"/>
+
+                                <h:outputLabel value="CEP: " for="codigoPostal"/>
+                                <p:inputMask id="codigoPostal"
+                                             mask="99.999-999"
+                                             placeholder="digite seu CEP"
+                                             value="#{organizacaoController.novoEndereco.codigoPostal}"/>
+                            </h:form>
+                            <p:commandButton style="child-align: center!important;" icon="fa fa-plus"
+                                             value="Adicionar Endereço" action="#{organizacaoController.salvarEndereco}"
+                                             styleClass="btn-primary" update="tabelaEndereco"
+                                             process="@this enderecos"/>
+
+                            <p:dataTable value="#{organizacaoController.subject.enderecos}"
+                                         var="enderecoR"
+                                         id="tabelaEndereco"
+                                         emptyMessage="Nenhum registro encontrado">
+                                <p:column>
+                                    <f:facet name="header">Cidade</f:facet>
+                                    <h:outputText value="#{enderecoR.localidade}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">País</f:facet>
+                                    <h:outputText value="#{enderecoR.pais}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">CEP</f:facet>
+                                    <h:outputText value="#{enderecoR.codigoPostal}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:fieldset>
+                    </div>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         action="#{organizacaoController.save()}"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{organizacaoController.delete(organizacaoController.subject)}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger"
+                                         rendered="#{organizacaoController.edit}">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{organizacaoController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   action="#{organizacaoController.save()}"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Excluir"
+                                    action="#{organizacaoController.delete(organizacaoController.subject)}"
+                                    process="@this"
+                                    icon="fa fa-trash"
+                                    rendered="#{organizacaoController.edit}"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="list?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="body">
+
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:focus/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-first-order"></i>   Avaliar Solicitação</h2>
+                </div>
+
+                <div class="box-body with-border">
+
+
+                    <div class="ui-fluid">
+                        <h:inputHidden value="#{solicitacaoAcreditacaoController.subject.id}"/>
+
+                        <p:fieldset legend="Solicitacao">
+                            <p:panelGrid id="capaPanel"
+                                         columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid"
+                            >
+
+                                <h:outputLabel style="font-weight: bold" for="categoria" value="Categoria"/>
+                                <h:outputText id="categoria"
+                                              value="#{solicitacaoAcreditacaoController.subject.categoria}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="competencia"
+                                               value="Competência Requerida"/>
+                                <h:outputText id="competencia"
+                                              value="#{solicitacaoAcreditacaoController.subject.competenciaRequerida}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="nivelEducacional"
+                                               value="Nível Educacional"/>
+                                <h:outputText id="nivelEducacional"
+                                              value="#{solicitacaoAcreditacaoController.subject.nivelEducacional}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="pessoaAcreditada"
+                                               value="Profissional (solicitante)"
+                                               rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+                                <h:outputText id="pessoaAcreditada"
+                                              value="#{solicitacaoAcreditacaoController.subject.pessoaAcreditada.nome}"
+                                              rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="orgAcreditada"
+                                               value="Organização (solicitante)"
+                                               rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                                <h:outputText id="orgAcreditada"
+                                              value="#{solicitacaoAcreditacaoController.subject.orgAcreditada.descricao}"
+                                              rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="orgReconhecedora" value="Credenciadora"/>
+                                <h:outputText id="orgReconhecedora"
+                                              value="#{solicitacaoAcreditacaoController.subject.orgReconhecedora.descricao}"
+                                />
+
+                                <h:outputLabel style="font-weight: bold" for="responsavel" value="Responsável"/>
+                                <h:outputText id="responsavel"
+                                              value="#{solicitacaoAcreditacaoController.subject.responsavel}"/>
+                            </p:panelGrid>
+                        </p:fieldset>
+                    </div>
+
+                    <p:spacer width="20" height="20"/>
+
+                    <div class="ui-fluid">
+                        <p:fieldset legend="Avaliação">
+                            <p:panelGrid id="avaliacaoPanel"
+                                         columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid">
+
+                                <p:outputLabel value="Etapas de Avaliação" for="tabelaEndereco"
+                                               rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+                                <p:dataTable value="#{solicitacaoAcreditacaoController.subject.avaliacaoTurmas}"
+                                             var="avaliacaoR"
+                                             id="tabelaEndereco"
+                                             rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}">
+                                    <p:column>
+                                        <f:facet name="header">Etapa</f:facet>
+                                        <h:outputText value="#{avaliacaoR.turma.disciplina.descricao}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">Resultado/Nota</f:facet>
+                                        <h:outputText value="#{avaliacaoR.nota}"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <h:outputLabel style="font-weight: bold" value="Documentos" rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                                <p:commandButton value="Baixar" ajax="false" rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}">
+                                    <p:fileDownload value="#{solicitacaoAcreditacaoController.arquivo}"/>
+                                </p:commandButton>
+                                <p:spacer width="5"/>
+                                <p:spacer width="5"/>
+                                <p:outputLabel value="Resultado avaliação" for="estadoAvaliacao"/>
+                                <p:selectOneRadio id="estadoAvaliacao"
+                                                  value="#{solicitacaoAcreditacaoController.subject.estadoAvaliacao}"
+                                                  unselectable="true">
+                                    <f:selectItem itemLabel="Deferido" itemValue="APROVADO"/>
+                                    <f:selectItem itemLabel="Indeferido" itemValue="REPROVADO"/>
+                                    <p:ajax process="@this"
+                                            update="parecerPanel"/>
+                                </p:selectOneRadio>
+
+                            </p:panelGrid>
+
+                            <p:panelGrid id="parecerPanel"
+                                         columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid">
+                                <p:outputLabel value="Parecer" for="parecer"
+                                               rendered="#{solicitacaoAcreditacaoController.subject.estadoAvaliacao eq 'REPROVADO'}"/>
+                                <p:inputTextarea id="parecer"
+                                                 value="#{solicitacaoAcreditacaoController.subject.parecer}"
+                                                 rendered="#{solicitacaoAcreditacaoController.subject.estadoAvaliacao eq 'REPROVADO'}"/>
+                            </p:panelGrid>
+                        </p:fieldset>
+                    </div>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         action="#{solicitacaoAcreditacaoController.finalizarSolicitacao()}"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{solicitacaoAcreditacaoController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+
+                    </div>
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   action="#{solicitacaoAcreditacaoController.save()}"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="list?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

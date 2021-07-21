@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/index.xhtml"
+>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-building"></i> Dados Organização </h2>
+                </div>
+                <div class="box-body with-border">
+
+                    <div class="ui-fluid">
+
+                        <fieldset>
+                            <legend>Dados do Item</legend>
+                            <p:panelGrid id="capaPanel"
+                                         columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid"
+                            >
+                                <h:outputLabel style="font-weight: bold" for="name" value="Nome"/>
+                                <h:outputText id="name" value="#{organizacaoController.subject.nome}"/>
+
+                                <p:outputLabel value="Descrição" for="descricao"/>
+                                <h:outputText id="descricao" value="#{organizacaoController.subject.descricao}"/>
+
+                                <p:outputLabel value="CNPJ" for="cnpj"/>
+                                <h:outputText id="cnpj" value="#{organizacaoController.subject.cnpj}"/>
+
+                                <p:outputLabel value="Número de Registro" for="numeroRegistro"/>
+                                <h:outputText id="numeroRegistro"
+                                              value="#{organizacaoController.subject.numeroRegistro}"/>
+
+                                <p:outputLabel value="E-mail" for="email"/>
+                                <h:outputText id="email" value="#{organizacaoController.subject.email}"/>
+
+
+                                <p:outputLabel value="Telefone" for="telefone"/>
+                                <h:outputText id="telefone" value="#{organizacaoController.subject.telefone}"/>
+
+                                <p:outputLabel value="Previsualização Logo: " for="logoImg"/>
+                                <h:graphicImage id="logoImg" value="#{organizacaoController.subject.logo}"
+                                                width="200" height="200"
+                                                styleClass="ui-expanded-widget-horizontal"/>
+
+                            </p:panelGrid>
+                            <fieldset>
+                                <legend>Endereços</legend>
+                                <p:dataTable value="#{organizacaoController.subject.enderecos}"
+                                             var="enderecoR"
+                                             id="tabelaEndereco"
+                                             emptyMessage="Nenhum registro encontrado">
+                                    <p:column>
+                                        <f:facet name="header">Cidade</f:facet>
+                                        <h:outputText value="#{enderecoR.localidade}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">País</f:facet>
+                                        <h:outputText value="#{enderecoR.pais}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">CEP</f:facet>
+                                        <h:outputText value="#{enderecoR.codigoPostal}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </fieldset>
+                        </fieldset>
+                    </div>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{organizacaoController.delete()}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{organizacaoController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

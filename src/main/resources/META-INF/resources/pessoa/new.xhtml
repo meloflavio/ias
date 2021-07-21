@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{pessoaController.isReload()}" />
+    </ui:define>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:focus/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-user"></i> Cadastrar Profissional </h2>
+                </div>
+                <div class="box-body with-border">
+                    <div class="ui-fluid">
+                        <h:inputHidden value="#{pessoaController.subject.id}"/>
+                        <p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-md-2,ui-md-10"
+                                     contentStyleClass="ui-fluid">
+                            <p:outputLabel value="ID" for="id" rendered="#{pessoaController.edit}"/>
+                            <p:inputText id="id" value="#{pessoaController.subject.id}"
+                                         rendered="#{pessoaController.edit}" disabled="true"/>
+
+                            <p:outputLabel value="Nome" for="name"/>
+                            <p:inputText id="name" value="#{pessoaController.subject.nome}"
+                                         placeholder="Digite seu nome aqui!"
+                                         required="true"/>
+
+                            <p:outputLabel value="CPF" for="cpf"/>
+                            <p:inputMask id="cpf" mask="999.999.999-99" value="#{pessoaController.subject.cpf}"
+                                         placeholder="Digite os números do seu CPF"
+                                         required="true"/>
+
+                            <p:outputLabel value="Número de Registro" for="numeroRegistro"/>
+                            <p:inputText id="numeroRegistro"
+                                         placeholder="Digite o numero do seu registro profissional"
+                                         value="#{pessoaController.subject.registroProfissional}"/>
+
+                            <p:outputLabel value="E-mail" for="email"/>
+                            <p:inputText id="email"
+                                         placeholder="Digite seu e-mail"
+                                         value="#{pessoaController.subject.email}"/>
+
+                            <p:outputLabel value="Telefone" for="telefone"/>
+                            <p:inputText id="telefone"
+                                         placeholder="Digite seu telefone"
+                                         value="#{pessoaController.subject.telefone}"/>
+
+                        </p:panelGrid>
+                        <p:fieldset legend="Endereços" id="enderecos">
+                            <h:form id="enderecoForm">
+                                <p:outputLabel value="Cidade:" for="localidade"/>
+                                <p:inputText id="localidade"
+                                             placeholder="digite o nome da sua cidade"
+                                             value="#{pessoaController.novoEndereco.localidade}"/>
+
+                                <h:outputLabel value="País: " for="pais"/>
+                                <p:inputText id="pais"
+                                             placeholder="digite o seu país"
+                                             value="#{pessoaController.novoEndereco.pais}"/>
+
+                                <h:outputLabel value="CEP: " for="codigoPostal"/>
+                                <p:inputMask id="codigoPostal"
+                                             mask="99.999-999"
+                                             placeholder="digite seu CEP"
+                                             value="#{pessoaController.novoEndereco.codigoPostal}"/>
+                            </h:form>
+                            <p:commandButton value="Adicionar Endereço" icon="fa fa-plus"
+                                             action="#{pessoaController.salvarEndereco}"
+                                             styleClass="btn-primary" update="enderecos"
+                                             resetValues="true"
+                                             process="@this enderecoForm"/>
+
+                            <p:dataTable value="#{pessoaController.subject.enderecos}"
+                                         var="enderecoR"
+                                         id="tabelaEndereco"
+                                         emptyMessage="Nenhum registro encontrado">
+                                <p:column>
+                                    <f:facet name="header">Cidade</f:facet>
+                                    <h:outputText value="#{enderecoR.localidade}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">País</f:facet>
+                                    <h:outputText value="#{enderecoR.pais}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">CEP</f:facet>
+                                    <h:outputText value="#{enderecoR.codigoPostal}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:fieldset>
+                    </div>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         action="#{pessoaController.save()}"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{pessoaController.delete(pessoaController.subject)}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger"
+                                         rendered="#{pessoaController.edit}">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{pessoaController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   action="#{pessoaController.save()}"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Excluir"
+                                    action="#{pessoaController.delete(pessoaController.subject)}"
+                                    process="@this"
+                                    icon="fa fa-trash"
+                                    rendered="#{pessoaController.edit}"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="list?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

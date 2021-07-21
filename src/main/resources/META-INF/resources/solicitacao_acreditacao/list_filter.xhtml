@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{solicitacaoAcreditacaoController.listSubjectsFilters()}"/>
+        <p:growl id="msgs" showDetail="false"/>
+    </ui:define>
+    <ui:define name="body">
+        <h:form>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-first-order"></i> Solicitação de Acreditação </h2>
+                </div>
+
+                <div class="box-body with-border">
+                    <p:dataTable id="subjectTable" var="subjectR"
+                                 value="#{solicitacaoAcreditacaoController.subjectFilters}" selectionMode="multiple"
+                                 selection="#{solicitacaoAcreditacaoController.subjectSelected}" rowKey="#{subjectR.id}"
+                                 paginator="true">
+
+                        <p:column headerText="Código" styleClass="col-md-3">
+                            <h:outputText style="text-align: center!important;" value="#{subjectR.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Categoria" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.categoria}"/>
+                        </p:column>
+
+                        <p:column headerText="Solicitante" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.orgAcreditada.descricao}"
+                                          rendered="#{subjectR.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                            <h:outputText value="#{subjectR.pessoaAcreditada}"
+                                          rendered="#{subjectR.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+                        </p:column>
+
+
+                        <p:column headerText="Competência" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.competenciaRequerida}"/>
+                        </p:column>
+
+                        <p:column headerText="Nível Educacional" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.nivelEducacional}"/>
+                        </p:column>
+
+                        <p:column headerText="Estado" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.estadoAvaliacao}"/>
+                        </p:column>
+
+
+
+                        <p:column styleClass="col-md-5">
+<!--                            <h:commandButton action="#{solicitacaoAcreditacaoController.show(subjectR.id)}"-->
+<!--                                             value="Exibir" icon="fa fa-file" class="btn btn-warning">-->
+<!--                            </h:commandButton>-->
+                            <h:commandButton action="#{solicitacaoAcreditacaoController.avaliar(subjectR.id)}"
+                                             value="Analisar" icon="fa fa-check" class="btn btn-primary">
+                            </h:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:separator/>
+
+                    <p:commandButton action="#{solicitacaoAcreditacaoController.create()}" ajax="false"
+                                     icon="fa fa-plus"
+                                     value="Novo" styleClass="btn-primary"/>
+                    <p:spacer width="5"/>
+                    <p:commandButton value="Excluir Selecionado(s)" icon="fa fa-trash" styleClass="btn-danger"
+                                     action="#{solicitacaoAcreditacaoController.deleteSelected()}"
+                                     process="@form" update="@form"/>
+                    <p:spacer width="5"/>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

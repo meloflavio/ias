@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{certificadoController.isReload()}"/>
+    </ui:define>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:focus/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-check-circle"></i> Verificar Certificados</h2>
+                </div>
+
+                <div class="box-body with-border">
+
+                    <div class="ui-fluid">
+                        <p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-md-2,ui-md-10"
+                                     contentStyleClass="ui-fluid">
+
+                            <p:outputLabel value="Hash do Certificado" for="hash"/>
+                            <p:inputText id="hash"
+                                         value="#{certificadoController.subject.contractAddress}"
+                                         placeholder="Digite aqui o Hash do certificado"/>
+
+                            <p:spacer width="5"/>
+
+                            <p:commandButton value="Verificar"
+                                             process="@form"
+                                             update="certificadoPanel"
+                                             action="#{certificadoController.validarCertificado}"
+                                             icon="fa fa-check" styleClass="btn-primary"/>
+                        </p:panelGrid>
+
+                        <p:spacer width="5"/>
+
+                        <p:outputPanel id="certificadoPanel">
+                        <p:fieldset legend="Dados Certificado" id="dadosCert"  rendered="#{certificadoController.subject.id != null}">
+                            <p:panelGrid id="certificadoPanel2" columns="2" layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid">
+
+                                <p:outputLabel value="Categoria"/>
+                                <p:outputLabel value="#{certificadoController.subject.categoria}"/>
+
+                                <p:outputLabel value="Competência"/>
+                                <p:outputLabel value="#{certificadoController.subject.competenciaRequerida}"/>
+
+                                <p:outputLabel value="Nível"/>
+                                <p:outputLabel value="#{certificadoController.subject.nivelEducacional}"/>
+
+                                <p:outputLabel value="Acreditado"/>
+                                <h:panelGroup>
+                                    <p:outputLabel value="#{certificadoController.subject.nomeAcreditado}"/>
+                                </h:panelGroup>
+
+                                <p:outputLabel value="Reconhecida por:"/>
+                                <p:outputLabel value="#{certificadoController.subject.orgReconhecedora.descricao}"/>
+
+                                <p:outputLabel value="Estado:"/>
+                                <p:outputLabel value="#{certificadoController.subject.statusDocumento}"/>
+
+                                <p:outputLabel value="Hash de Autenticação:"/>
+                                <p:outputLabel value="#{certificadoController.subject.contractHashTransation}"/>
+
+                                <p:spacer width="5"/>
+
+                                <p:outputLabel style="background: #32769D!important; color: white!important;" value="Certificado verififcado automáticamente!"/>
+
+                            </p:panelGrid>
+                        </p:fieldset>
+                        </p:outputPanel>
+                    </div>
+
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

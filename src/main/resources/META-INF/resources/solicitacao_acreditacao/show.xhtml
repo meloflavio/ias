@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/index.xhtml"
+>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <div class="box box-primary">
+
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-first-order"></i> Solicitação de Acreditação </h2>
+                </div>
+
+                <div class="box-body with-border">
+
+                    <div class="ui-fluid">
+
+                        <fieldset>
+                            <legend>Dados do Item</legend>
+                            <!--                    <h:panelGrid columns="2" cellpadding="7">-->
+                            <p:panelGrid id="capaPanel"
+                                         columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid">
+
+                                <h:outputLabel style="font-weight: bold" for="categoria" value="Categoria"/>
+                                <h:outputText id="categoria"
+                                              value="#{solicitacaoAcreditacaoController.subject.categoria}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="competencia"
+                                               value="Competência Requerida"/>
+                                <h:outputText id="competencia"
+                                              value="#{solicitacaoAcreditacaoController.subject.competenciaRequerida}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="nivelEducacional"
+                                               value="Nível Educacional"/>
+                                <h:outputText id="nivelEducacional"
+                                              value="#{solicitacaoAcreditacaoController.subject.nivelEducacional}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="pessoaAcreditada"
+                                               value="Profissional (solicitante)"
+                                               rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+                                <h:outputText id="pessoaAcreditada"
+                                              value="#{solicitacaoAcreditacaoController.subject.pessoaAcreditada}"
+                                              rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="orgAcreditada"
+                                               value="Organização (solicitante)"
+                                               rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                                <h:outputText id="orgAcreditada"
+                                              value="#{solicitacaoAcreditacaoController.subject.orgAcreditada.descricao}"
+                                              rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="orgReconhecedora" value="Credenciadora"/>
+                                <h:outputText id="orgReconhecedora"
+                                              value="#{solicitacaoAcreditacaoController.subject.orgReconhecedora.descricao}"/>
+
+                                <h:outputLabel style="font-weight: bold" value="Documentos" rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                                <p:commandButton value="Baixar" ajax="false" rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}">
+                                    <p:fileDownload value="#{solicitacaoAcreditacaoController.arquivo}"/>
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </fieldset>
+                    </div>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{solicitacaoAcreditacaoController.delete}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{solicitacaoAcreditacaoController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="body">
+        <script type="text/javascript">
+            PrimeFaces.locales['pt'] = {
+            closeText: 'Fechar',
+            prevText: 'Anterior',
+            nextText: 'Próximo',
+            currentText: 'Começo',
+            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
+            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+            dayNamesMin: ['D','S','T','Q','Q','S','S'],
+            weekHeader: 'Semana',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            timeOnlyTitle: 'Só Horas',
+            timeText: 'Tempo',
+            hourText: 'Hora',
+            minuteText: 'Minuto',
+            secondText: 'Segundo',
+            currentText: 'Data Atual',
+            ampm: false,
+            month: 'Mês',
+            week: 'Semana',
+            day: 'Dia',
+            allDayText : 'Todo Dia'
+            };
+        </script>
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:focus/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+
+
+                    <div class="ui-fluid">
+                        <h:inputHidden value="#{turmaController.subject.id}"/>
+
+                        <p:fieldset legend="#{turmaController.subject.disciplina.descricao}">
+                            <p:dataTable value="#{turmaController.subject.avaliacaoTurmas}" var="avaliacao" editable="true"
+                                         editMode="cell" widgetVar="cellAvaliacao"
+                                         id="tabelaAvaliacao">
+                                <p:ajax event="cellEdit" listener="#{turmaController.onCellEdit}" update="tabelaAvaliacao"/>
+
+                                <p:column headerText="Profissional">
+                                    <f:facet name="header">Participante</f:facet>
+                                    <h:outputText value="#{avaliacao.participante}"/>
+                                </p:column>
+                                <p:column headerText="Nota*" style="text-align: center">
+                                    <p:cellEditor>
+                                        <f:facet name="output" >
+                                            <h:outputText value="Clique aqui e selecione a nota."  rendered="#{avaliacao.nota == null}" title="adicionar nota"/>
+                                            <h:outputText value="#{avaliacao.nota}" rendered="#{avaliacao.nota != null}"  title="adicionar nota"/>
+                                        </f:facet>
+                                        <f:facet name="input" >
+                                            <p:selectOneMenu id="nota" value="#{avaliacao.nota}" required="true" label="Text 3">
+                                                <p:ajax event="valueChange" update="@this" process="@this"/>
+                                                <p:ajax event="valueChange" update="tabelaAvaliacao" process="tabelaAvaliacao"/>
+                                                <f:selectItem itemLabel="Selecione uma nota" itemValue="" noSelectionOption="true"/>
+                                                <f:selectItem itemLabel="1" itemValue="1"/>
+                                                <f:selectItem itemLabel="2" itemValue="2"/>
+                                                <f:selectItem itemLabel="3" itemValue="3"/>
+                                                <f:selectItem itemLabel="4" itemValue="4"/>
+                                                <f:selectItem itemLabel="5" itemValue="5"/>
+                                                <f:selectItem itemLabel="6" itemValue="6"/>
+                                                <f:selectItem itemLabel="7" itemValue="7"/>
+                                                <f:selectItem itemLabel="8" itemValue="8"/>
+                                                <f:selectItem itemLabel="9" itemValue="9"/>
+                                                <f:selectItem itemLabel="10" itemValue="10"/>
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                            </p:dataTable>
+                            <div style="color:red; text-align: center">
+                                * Clique na célula da nota para selecionar um valor.
+                            </div>
+                        </p:fieldset>
+                    </div>
+                    <p:contextMenu for="tabelaAvaliacao" widgetVar="cMenu">
+                        <p:menuitem value="Editar Celular" icon="pi pi-search"
+                                    onclick="PF('cellAvaliacao').showCellEditor();return false;"/>
+                        <p:menuitem value="Hide Menu" icon="pi pi-times" onclick="PF('cMenu').hide()"/>
+                    </p:contextMenu>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         action="#{turmaController.saveAvaliacao()}"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{turmaController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+
+                    </div>
+
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   action="#{turmaController.saveAvaliacao()}"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="list?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

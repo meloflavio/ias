@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/index.xhtml"
+>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div class="ui-fluid">
+
+                        <fieldset>
+                            <legend>Dados do Item</legend>
+                            <!--                    <h:panelGrid columns="2" cellpadding="7">-->
+                            <p:panelGrid id="capaPanel"
+                                         columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid"
+                            >
+                                <h:outputLabel style="font-weight: bold" for="categoria" value="Categoria"/>
+                                <h:outputText id="categoria" value="#{certificadoController.subject.categoria}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="pessoaAcreditada"
+                                               value="Profissional (Acreditado)"
+                                               rendered="#{certificadoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+                                <h:outputText id="pessoaAcreditada"
+                                              value="#{certificadoController.subject.profissional}"
+                                              rendered="#{certificadoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="orgAcreditada"
+                                               value="Organização (Acreditada)"
+                                               rendered="#{certificadoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                                <h:outputText id="orgAcreditada"
+                                              value="#{certificadoController.subject.orgAcreditada.descricao}"
+                                              rendered="#{certificadoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+
+
+                                <h:outputLabel style="font-weight: bold" for="competencia"
+                                               value="Competência Requerida"/>
+                                <h:outputText id="competencia"
+                                              value="#{certificadoController.subject.competenciaRequerida}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="nivelEducacional"
+                                               value="Nível Educacional"/>
+                                <h:outputText id="nivelEducacional"
+                                              value="#{certificadoController.subject.nivelEducacional}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="statusDocumento" value="Status"/>
+                                <h:outputText id="statusDocumento"
+                                              value="#{certificadoController.subject.statusDocumento}"/>
+
+                                <h:outputLabel style="font-weight: bold" for="orgReconhecedora" value="Credenciadora"/>
+                                <h:outputText id="orgReconhecedora"
+                                              value="#{certificadoController.subject.orgReconhecedora.descricao}"/>
+                                <h:outputLabel style="font-weight: bold" for="contractAddress" value="Endereço do Contrato (Hash)"/>
+                                <h:outputText id="contractAddress"
+                                              value="#{certificadoController.subject.contractAddress}"/>
+
+                            </p:panelGrid>
+                        </fieldset>
+
+                    </div>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{certificadoController.delete(certificadoController.subject)}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{certificadoController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

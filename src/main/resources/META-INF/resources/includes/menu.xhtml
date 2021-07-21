@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ul class="sidebar-menu tree" data-widget="tree">
+        <li>
+            <p:link href="/index.jsf" onclick="clearBreadCrumbs()">
+                <i class="fa fa-home"></i>
+                <span>INÍCIO</span>
+            </p:link>
+        </li>
+        <li>
+            <p:link outcome="/pessoa/new">
+                <i class="fa fa-user"></i>
+                <span>CADASTRAR PROFISSIONAL</span>
+            </p:link>
+        </li>
+<!--        <li class="treeview">-->
+<!--            <a href="#">-->
+<!--                <i class="fa fa-laptop"></i>-->
+<!--                <span>Parâmetros</span>-->
+<!--                <span class="pull-right-container">-->
+<!--                    <i class="fa fa-angle-left pull-right"></i>-->
+<!--                </span>-->
+<!--            </a>-->
+<!--            <ul class="treeview-menu">-->
+<!--                <li>-->
+<!--                    <p:link outcome="/categoria/list">-->
+<!--                        <i class="fa fa-bars"></i>-->
+<!--                        <span>Categoria</span>-->
+<!--                    </p:link>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <p:link outcome="/curso/list">-->
+<!--                        <i class="fa fa-bars"></i>-->
+<!--                        <span>Competência</span>-->
+<!--                    </p:link>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <p:link outcome="/nivel_educacional/list">-->
+<!--                        <i class="fa fa-bars"></i>-->
+<!--                        <span>Nível Educacional</span>-->
+<!--                    </p:link>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <p:link outcome="/disciplina/list">-->
+<!--                        <i class="fa fa-bars"></i>-->
+<!--                        <span>Etapa de Avaliação</span>-->
+<!--                    </p:link>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </li>-->
+<!--        AA-->
+
+
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-share-square"></i>
+                <span>ACREDITAÇÃO</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li>
+                    <p:link outcome="/solicitacao_acreditacao/new">
+                        <i class="fa fa-plus-circle"></i>
+                        <span>Solicitar acreditação</span>
+                    </p:link>
+                </li>
+                <li>
+                    <p:link outcome="/solicitacao_acreditacao/consulta_solicitacao">
+                        <i class="fa fa-search"></i>
+                        <span>Consultar Resultado</span>
+                    </p:link>
+                </li>
+            </ul>
+        </li>
+        <!--        AA-->
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-certificate"></i>
+                <span>CERTIFICADOS</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+<!--                <li>-->
+<!--                    <p:link outcome="/certificado/list">-->
+<!--                        <i class="fa fa-graduation-cap"></i>-->
+<!--                        <span>Certificados</span>-->
+<!--                    </p:link>-->
+<!--                </li>-->
+                <li>
+                    <p:link outcome="/certificado/validar_certificado">
+                        <i class="fa fa-check-circle"></i>
+                        <span>Verificar Certificados</span>
+                    </p:link>
+                </li>
+                <li>
+                    <p:link outcome="/certificado/consulta_certificado">
+                        <i class="fa fa-search"></i>
+                        <span>Consultar Certificados</span>
+                    </p:link>
+                </li>
+            </ul>
+        </li>
+
+
+    <!--        AA-->
+
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-gears"></i>
+                <span>ADMINISTRAÇÃO</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li>
+                    <p:link outcome="/organizacao/list">
+                        <i class="fa fa-building"></i>
+                        <span>Organizações</span>
+                    </p:link>
+                </li>
+                <li>
+                    <p:link outcome="/pessoa/list">
+                        <i class="fa fa-users"></i>
+                        <span>Profissionais</span>
+                    </p:link>
+                </li>
+                <li>
+                    <p:link outcome="/solicitacao_acreditacao/list">
+                        <i class="fa fa-first-order"></i>
+                        <span>Solicitações</span>
+                    </p:link>
+                </li>
+                <li>
+                    <p:link outcome="/turma/list">
+                        <i class="fa fa-list"></i>
+                        <span>Grupo de Avaliação</span>
+                    </p:link>
+                </li>
+            </ul>
+        </li>
+</ul>
+
+</ui:composition>

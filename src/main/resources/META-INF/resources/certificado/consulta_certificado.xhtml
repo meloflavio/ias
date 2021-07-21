@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{certificadoController.isReload()}"/>
+    </ui:define>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:focus/>
+
+            <div class="box box-primary">
+
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-search"></i> Consultar Certificados</h2>
+                </div>
+
+                <div class="box-body with-border">
+                    <div class="ui-fluid">
+                        <p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-md-2,ui-md-10"
+                                     contentStyleClass="ui-fluid">
+
+                            <p:outputLabel value="Categoria" for="@next"/>
+                            <p:selectOneRadio id="categoria" converter="#{categoriaConverter}"
+                                              value="#{certificadoController.subject.categoria}"
+                                              unselectable="true">
+                                <f:selectItems value="#{categoriaController.todasMenosPares}" var="cat"
+                                               itemValue="#{cat}" itemLabel="#{cat.descricao}"/>
+                                <p:ajax process="@this"
+                                        update="capaPanel"/>
+                            </p:selectOneRadio>
+
+                            <p:spacer/>
+                            <p:spacer width="10"/>
+
+                            <p:outputLabel value="Organização" for="@next"
+                                           rendered="#{certificadoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+
+                            <p:autoComplete id="orgAcreditada" value="#{certificadoController.subject.orgAcreditada}"
+                                            completeMethod="#{organizacaoController.completeOrganizacoes}"
+                                            var="org" itemLabel="#{org.nome}" itemValue="#{org}" dropdown="true"
+                                            placeholder="Digite o nome ou Selecione uma organização"
+                                            converter="#{organizacaoConverter}" forceSelection="true" scrollHeight="250"
+                                            rendered="#{certificadoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+
+                            <p:outputLabel value="Profissional " for="@next"
+                                           rendered="#{certificadoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+                            <p:autoComplete id="pessoaAcreditaca"
+                                            value="#{certificadoController.subject.profissional}"
+                                            completeMethod="#{pessoaController.completePessoas}"
+                                            placeholder="Digite o nome ou Selecione um profissional"
+                                            var="pesAC" itemLabel="#{pesAC.nome}" itemValue="#{pesAC}" dropdown="true"
+                                            converter="#{pessoaConverter}" forceSelection="true" scrollHeight="250"
+                                            rendered="#{certificadoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+                            <p:spacer/>
+                            <p:commandButton value="Consultar"
+                                             process="@form"
+                                             update="certificadoPanel"
+                                             action="#{certificadoController.consultarCertificados}"
+                                             icon="fa fa-search" styleClass="btn-primary"/>
+                        </p:panelGrid>
+
+                        <p:spacer width="10"/>
+
+                        <p:outputPanel id="certificadoPanel">
+                            <p:fieldset legend="Dados Certificado" id="dadosCert"  rendered="#{certificadoController.certConsultados.size() > 0}">
+                                <p:panelGrid id="certificadoPanel2" columns="1" layout="grid"
+                                             contentStyleClass="ui-fluid">
+                                    <p:dataTable id="subjectTable"
+                                                 var="subjectR"
+                                                 value="#{certificadoController.certConsultados}"
+                                                 selectionMode="multiple"
+                                                 selection="#{certificadoController.subjectSelected}"
+                                                 rowKey="#{subjectR.id}"
+                                                 paginator="true"
+                                                 emptyMessage="Nenhum registro encontrado">
+
+                                        <p:column headerText="Código" styleClass="col-md-5">
+                                            <h:outputText value="#{subjectR.id}"/>
+                                        </p:column>
+                                        <p:column headerText="Categoria" styleClass="col-md-5">
+                                            <h:outputText value="#{subjectR.categoria}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Solicitante" styleClass="col-md-5">
+                                            <h:outputText value="#{subjectR.orgAcreditada.descricao}"
+                                                          rendered="#{subjectR.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                                            <h:outputText value="#{subjectR.profissional}"
+                                                          rendered="#{!subjectR.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Competência" styleClass="col-md-5">
+                                            <h:outputText value="#{subjectR.competenciaRequerida}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Nível Educacional" styleClass="col-md-5">
+                                            <h:outputText value="#{subjectR.nivelEducacional}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Estado (status)" styleClass="col-md-5">
+                                            <h:outputText value="#{subjectR.statusDocumento}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Ação" styleClass="col-md-5">
+                                            <h:commandButton action="#{certificadoController.print(subjectR.id)}"
+                                                             value="Certificado"
+                                                             class="btn btn-info"
+                                                             rendered="#{subjectR.contractAddress != null}">
+                                            </h:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+
+                                </p:panelGrid>
+                            </p:fieldset>
+                        </p:outputPanel>
+
+                    </div>
+
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

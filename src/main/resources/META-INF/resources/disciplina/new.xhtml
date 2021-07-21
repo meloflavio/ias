@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:focus/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+
+
+                    <div class="ui-fluid">
+                        <h:inputHidden value="#{disciplinaController.subject.id}"/>
+
+                        <p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-md-1,ui-md-11"
+                                     contentStyleClass="ui-fluid">
+                            <p:outputLabel value="ID" for="id" rendered="#{disciplinaController.edit}"/>
+                            <p:inputText id="id" value="#{disciplinaController.subject.id}"
+                                         rendered="#{disciplinaController.edit}" disabled="true"/>
+
+                            <p:outputLabel value="Descricao" for="descricao"/>
+                            <p:inputText id="descricao" value="#{disciplinaController.subject.descricao}"/>
+
+                            <p:outputLabel value="Competência" for="@next"/>
+                            <p:autoComplete id="curso" value="#{disciplinaController.subject.curso}"
+                                            completeMethod="#{cursoController.completeCursos}"
+                                            var="c" itemLabel="#{c.nome}" itemValue="#{c}"
+                                            converter="#{cursoConverter}" forceSelection="true" scrollHeight="250"/>
+                        </p:panelGrid>
+                    </div>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         action="#{disciplinaController.save()}"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{disciplinaController.delete(disciplinaController.subject)}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger"
+                                         rendered="#{disciplinaController.edit}">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{disciplinaController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+
+                    </div>
+
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   action="#{disciplinaController.save()}"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Excluir"
+                                    action="#{disciplinaController.delete(disciplinaController.subject)}"
+                                    process="@this"
+                                    icon="fa fa-trash"
+                                    rendered="#{disciplinaController.edit}"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="list?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

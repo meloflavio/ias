@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:focus/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         action="#{acreditacaoParesController.save()}"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{acreditacaoParesController.delete()}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{acreditacaoParesController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+
+                    </div>
+
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   action="#{acreditacaoParesController.save()}"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Excluir"
+                                    action="#{acreditacaoParesController.delete()}"
+                                    process="@this"
+                                    icon="fa fa-trash"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="list?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+                    <p:separator/>
+
+                    <div class="ui-fluid">
+                        <h:inputHidden value="#{acreditacaoParesController.subject.id}"/>
+
+                        <p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-md-1,ui-md-11"
+                                     contentStyleClass="ui-fluid">
+                            <p:outputLabel value="ID" for="id" rendered="#{acreditacaoParesController.edit}"/>
+                            <p:inputText id="id" value="#{acreditacaoParesController.subject.id}"
+                                         rendered="#{acreditacaoParesController.edit}" disabled="true"/>
+
+                            <p:outputLabel value="Competência" for="@next"/>
+                            <p:autoComplete id="competencia" value="#{acreditacaoParesController.subject.competenciaRequerida}"
+                                            completeMethod="#{cursoController.completeCursos}"
+                                            var="comp" itemLabel="#{comp.nome}" itemValue="#{comp}" dropdown="true"
+                                            converter="#{cursoConverter}" forceSelection="true" scrollHeight="250"/>
+
+                            <p:outputLabel value="Votante" for="@next"/>
+                            <p:autoComplete id="votante" value="#{acreditacaoParesController.votante}"
+                                            completeMethod="#{pessoaController.completePessoas}"
+                                            var="pes" itemLabel="#{pes.nome}" itemValue="#{pes}" dropdown="true"
+                                            converter="#{pessoaConverter}" forceSelection="true" scrollHeight="250">
+                            </p:autoComplete>
+
+
+                            <p:outputLabel value="Acreditado" for="@next"/>
+                            <p:autoComplete id="acreditado" value="#{acreditacaoParesController.subject.acreditado}"
+                                            completeMethod="#{pessoaController.completePessoas}"
+                                            var="pes" itemLabel="#{pes.nome}" itemValue="#{pes}" dropdown="true"
+                                            converter="#{pessoaConverter}" forceSelection="true" scrollHeight="250"/>
+
+                        </p:panelGrid>
+                    </div>
+
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

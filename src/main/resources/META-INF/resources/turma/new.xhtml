@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="body">
+        <script type="text/javascript">
+            PrimeFaces.locales['pt'] = {
+            closeText: 'Fechar',
+            prevText: 'Anterior',
+            nextText: 'Próximo',
+            currentText: 'Começo',
+            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
+            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+            dayNamesMin: ['D','S','T','Q','Q','S','S'],
+            weekHeader: 'Semana',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            timeOnlyTitle: 'Só Horas',
+            timeText: 'Tempo',
+            hourText: 'Hora',
+            minuteText: 'Minuto',
+            secondText: 'Segundo',
+            currentText: 'Data Atual',
+            ampm: false,
+            month: 'Mês',
+            week: 'Semana',
+            day: 'Dia',
+            allDayText : 'Todo Dia'
+            };
+        </script>
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:focus/>
+
+            <div class="box box-primary">
+
+                <div class="box-header with-border">
+                    <h2>Nova Avaliação </h2>
+                </div>
+
+                <div class="box-body with-border">
+                    <div class="ui-fluid">
+                        <h:inputHidden value="#{turmaController.subject.id}"/>
+
+                        <p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-md-1,ui-md-11"
+                                     contentStyleClass="ui-fluid">
+                            <p:outputLabel value="ID" for="id" rendered="#{turmaController.edit}"/>
+                            <p:inputText id="id" value="#{turmaController.subject.id}"
+                                         rendered="#{turmaController.edit}" disabled="true"/>
+
+                            <p:outputLabel value="Nome" for="name"/>
+                            <p:inputText id="name" value="#{turmaController.subject.nome}"/>
+
+                            <p:outputLabel for="dataInicio" value="Data de Início:"/>
+                            <p:calendar id="dataInicio" value="#{turmaController.subject.dataInicio}"
+                                        locale="pt" navigator="true"
+                                        pattern="dd/MM/yyyy"/>
+
+                            <p:outputLabel for="dataFim" value="Data de Término:"/>
+                            <p:calendar id="dataFim" value="#{turmaController.subject.dataFim}"
+                                        locale="pt" navigator="true"
+                                        pattern="dd/MM/yyyy"/>
+
+                            <p:outputLabel value="Instrutor" for="@next"/>
+                            <p:autoComplete id="instrutor" value="#{turmaController.subject.instrutor}"
+                                            completeMethod="#{pessoaController.completePessoas}"
+                                            var="c" itemLabel="#{c.nome}" itemValue="#{c}"
+                                            converter="#{pessoaConverter}" forceSelection="true" scrollHeight="250"/>
+
+                            <p:outputLabel value="Disciplina" for="@next"/>
+                            <p:autoComplete id="Disciplina" value="#{turmaController.subject.disciplina}"
+                                            completeMethod="#{disciplinaController.completeDisciplina}"
+                                            var="d" itemLabel="#{d.nome}" itemValue="#{d}"
+                                            converter="#{disciplinaConverter}" forceSelection="true" scrollHeight="250"/>
+
+                            <p:outputLabel value="Participantes" for="@next"/>
+                            <p:autoComplete id="participantes" multiple="true" value="#{turmaController.subject.participantes}"
+                                            completeMethod="#{pessoaController.completePessoas}"
+                                            var="c" itemLabel="#{c.nome}" itemValue="#{c}"  unique="true"
+                                            converter="#{pessoaConverter}" forceSelection="true" scrollHeight="250">
+                                <p:column>
+                                    <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{c.nome}"/>
+                                </p:column>
+                            </p:autoComplete>
+                        </p:panelGrid>
+                    </div>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         action="#{turmaController.save()}"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{turmaController.delete()}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{turmaController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   action="#{turmaController.save()}"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Excluir"
+                                    action="#{turmaController.delete()}"
+                                    process="@this"
+                                    icon="fa fa-trash"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="list?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

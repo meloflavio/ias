@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/index.xhtml"
+>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{acreditacaoParesController.delete()}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{acreditacaoParesController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+
+                    <p:separator/>
+
+                    <div class="ui-fluid">
+
+                        <fieldset>
+                            <legend>Dados do Item</legend>
+                            <!--                    <h:panelGrid columns="2" cellpadding="7">-->
+                            <p:panelGrid id="capaPanel"
+                                         columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid"
+                            >
+
+                                <h:outputLabel style="font-weight: bold" for="name" value="Nome"/>
+                                <h:outputText id="name" value="#{acreditacaoParesController.subject.name}"/>
+
+                            </p:panelGrid>
+                        </fieldset>
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

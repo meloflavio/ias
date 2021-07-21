@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{acreditacaoParesController.listSubjects()}" />
+    </ui:define>
+    <ui:define name="body">
+        <h:form>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <p:commandButton action="#{acreditacaoParesController.create()}" ajax="false" icon="fa fa-plus"
+                                     value="Novo" styleClass="btn-primary"/>
+                    <p:spacer width="5"/>
+                    <p:commandButton value="Excluir Selecionado(s)" icon="fa fa-trash" styleClass="btn-danger"
+                                     action="#{acreditacaoParesController.deleteSelected()}"
+                                     process="@form" update="@form"/>
+                    <p:spacer width="5"/>
+                    <p:commandButton value="Olhar Selecionado(s)"
+                                     oncomplete="PF('subjectSelected').show()"
+                                     update="@(.ui-dialog)"
+                                     styleClass="btn-info"
+                                     icon="fa fa-search"/>
+                    <p:separator/>
+
+                    <p:dataTable id="subjectTable" var="subjectR" value="#{acreditacaoParesController.subjectList}" selectionMode="multiple"
+                                 selection="#{acreditacaoParesController.subjectSelected}" rowKey="#{subjectR.id}"  paginator="true"
+                    >
+
+                        <p:column headerText="Código" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.id}" />
+                        </p:column>
+
+                        <p:column headerText="Nome" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.nome}" />
+                        </p:column>
+
+                        <p:column styleClass="col-md-3">
+                            <h:commandButton action = "#{acreditacaoParesController.modify(subjectR.id)}" value="Editar" icon="fa fa-pencil" class="btn btn-primary">
+                            </h:commandButton>
+                            <h:commandButton action = "#{acreditacaoParesController.show(subjectR.id)}"  value="Exibir" icon="fa fa-file" class="btn btm-warning">
+                            </h:commandButton>
+
+                        </p:column>
+
+                    </p:dataTable>
+
+                </div>
+            </div>
+        </h:form>
+
+<!--        <p:dialog header="Tarefas Selecionadas" widgetVar="selectedPersons" height="250"-->
+<!--                  width="400" responsive="true" styleClass="box-success">-->
+<!--            <p:dataList id="listaTermosSelecionadas" value="#{personController.selectedPersons}" var="p"-->
+<!--                        type="definition">-->
+
+<!--                ID: #{p.id} - Nome: #{p.pessoa.nome} - Carteira: #{p.pessoa.carteira}-->
+
+<!--            </p:dataList>-->
+<!--        </p:dialog>-->
+
+
+    </ui:define>
+</ui:composition>

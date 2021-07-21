@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{solicitacaoAcreditacaoController.isReload()}"/>
+    </ui:define>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:focus/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-first-order"></i> Solicitação de Acreditação </h2>
+                </div>
+
+                <div class="box-body with-border">
+                    <div class="ui-fluid">
+                        <h:inputHidden value="#{solicitacaoAcreditacaoController.subject.id}"/>
+                        <p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-md-2,ui-md-10"
+                                     contentStyleClass="ui-fluid">
+                            <p:outputLabel value="ID" for="id" rendered="#{solicitacaoAcreditacaoController.edit}"/>
+                            <p:inputText id="id" value="#{solicitacaoAcreditacaoController.subject.id}"
+                                         rendered="#{solicitacaoAcreditacaoController.edit}" disabled="true"/>
+
+                            <p:outputLabel value="Categoria" for="@next"/>
+                            <p:selectOneRadio id="categoria" converter="#{categoriaConverter}"
+                                              value="#{solicitacaoAcreditacaoController.subject.categoria}"
+                                              unselectable="true">
+                                <f:selectItems value="#{categoriaController.todasMenosPares}" var="cat"
+                                               itemValue="#{cat}" itemLabel="#{cat.descricao}"/>
+                                <p:ajax process="@this"
+                                        update="panelfooter"/>
+                            </p:selectOneRadio>
+
+                            <p:outputLabel value="Organização Reconhecedora" for="@next"/>
+                            <p:autoComplete id="reconhecedora"
+                                            value="#{solicitacaoAcreditacaoController.subject.orgReconhecedora}"
+                                            completeMethod="#{organizacaoController.completeOrganizacoes}"
+                                            var="org" itemLabel="#{org.nome}" itemValue="#{org}" dropdown="true"
+                                            converter="#{organizacaoConverter}" forceSelection="true"
+                                            placeholder="Selecione uma organização"
+                                            scrollHeight="250"/>
+
+                            <p:outputLabel value="Competência" for="@next"/>
+                            <p:autoComplete id="competencia"
+                                            value="#{solicitacaoAcreditacaoController.subject.competenciaRequerida}"
+                                            completeMethod="#{cursoController.completeCursos}"
+                                            var="comp" itemLabel="#{comp.nome}" itemValue="#{comp}" dropdown="true"
+                                            converter="#{cursoConverter}" forceSelection="true" scrollHeight="250"
+                                            placeholder="Selecione uma competência"/>
+
+                            <p:outputLabel value="Nível Educacional" for="@next"/>
+                            <p:autoComplete id="nivelEducacional"
+                                            value="#{solicitacaoAcreditacaoController.subject.nivelEducacional}"
+                                            completeMethod="#{nivelEducacionalController.completeNivelEducacional}"
+                                            var="niv" itemLabel="#{niv.descricao}" itemValue="#{niv}" dropdown="true"
+                                            converter="#{nivelEducacionalConverter}" forceSelection="true"
+                                            placeholder="Selecione o nível de acreditação desejado"
+                                            scrollHeight="250"/>
+                        </p:panelGrid>
+
+                        <p:panelGrid id="panelfooter" columns="2" layout="grid" columnClasses="ui-md-2,ui-md-10"
+                                     contentStyleClass="ui-fluid">
+                            <p:outputLabel value="Profissional (solicitante)" for="@next"
+                                           rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+                            <p:autoComplete id="pessoaAcreditaca"
+                                            value="#{solicitacaoAcreditacaoController.subject.pessoaAcreditada}"
+                                            completeMethod="#{pessoaController.completePessoas}"
+                                            var="pesAC" itemLabel="#{pesAC.nome}" itemValue="#{pesAC}" dropdown="true"
+                                            converter="#{pessoaConverter}" forceSelection="true" scrollHeight="250"
+                                            placeholder="Selecione um profissional"
+                                            rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('PROFISSIONAL')}"/>
+                            <p:outputLabel value="Organização (solicitante)" for="@next"
+                                           rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                            <p:autoComplete id="orgAcreditacao"
+                                            value="#{solicitacaoAcreditacaoController.subject.orgAcreditada}"
+                                            completeMethod="#{organizacaoController.completeOrganizacoes}"
+                                            var="orgACR" itemLabel="#{orgACR.nome}" itemValue="#{orgACR}"
+                                            dropdown="true"
+                                            placeholder="Selecione uma organização"
+                                            converter="#{organizacaoConverter}" forceSelection="true" scrollHeight="250"
+                                            rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+
+                            <p:outputLabel value="Documentos: " for="fileUpload"
+                                           rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                            <p:fileUpload id="fileUpload"
+                                          fileUploadListener="#{solicitacaoAcreditacaoController.upload}"
+                                          allowTypes="/(\.|\/)(PDF|pdf)$/"
+                                          skinSimple="true" update="msgs" auto="true"
+                                          mode="advanced" label="Escolher"
+                                          rendered="#{solicitacaoAcreditacaoController.subject.categoria.descricao.toUpperCase().contains('ORG')}"/>
+                        </p:panelGrid>
+                    </div>
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         action="#{solicitacaoAcreditacaoController.save()}"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{solicitacaoAcreditacaoController.delete(solicitacaoAcreditacaoController.subject)}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger"
+                                         rendered="#{solicitacaoAcreditacaoController.edit}">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{solicitacaoAcreditacaoController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   action="#{solicitacaoAcreditacaoController.save()}"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Excluir"
+                                    action="#{solicitacaoAcreditacaoController.delete(solicitacaoAcreditacaoController.subject)}"
+                                    process="@this"
+                                    icon="fa fa-trash"
+                                    rendered="#{solicitacaoAcreditacaoController.edit}"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="list?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+                </div>
+            </div>
+            <ui:debug/>
+        </h:form>
+    </ui:define>
+</ui:composition>

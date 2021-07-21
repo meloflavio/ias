@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/index.xhtml"
+>
+    <ui:define name="body">
+        <h:form id="form" prependId="false">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h2><i class="fa fa-user"></i> Dados Profissional </h2>
+                </div>
+                <div class="box-body with-border">
+
+
+                    <div class="ui-fluid">
+
+                        <fieldset>
+                            <legend>Dados do Item</legend>
+                            <!--                    <h:panelGrid columns="2" cellpadding="7">-->
+                            <p:panelGrid id="capaPanel"
+                                         columns="2"
+                                         layout="grid"
+                                         columnClasses="ui-md-2,ui-md-10"
+                                         contentStyleClass="ui-fluid">
+
+                                <h:outputLabel style="font-weight: bold" for="name" value="Nome"/>
+                                <h:outputText id="name" value="#{pessoaController.subject.nome}"/>
+
+                                <p:outputLabel value="CPF" for="cpf"/>
+                                <h:outputText id="cpf" value="#{pessoaController.subject.cpf}"/>
+
+                                <p:outputLabel value="Número de Registro" for="numeroRegistro"/>
+                                <h:outputText id="numeroRegistro"
+                                              value="#{pessoaController.subject.registroProfissional}"/>
+
+                                <p:outputLabel value="E-mail" for="email"/>
+                                <h:outputText id="email" value="#{pessoaController.subject.email}"/>
+
+                                <p:outputLabel value="Telefone" for="telefone"/>
+                                <h:outputText id="telefone" value="#{pessoaController.subject.telefone}"/>
+                            </p:panelGrid>
+                            <fieldset>
+                                <legend>Organizações</legend>
+                                <p:dataTable value="#{pessoaController.subject.organizacoes}"
+                                             var="orgR"
+                                             id="tabelaOrgs"
+                                             emptyMessage="Nenhum registro encontrado">
+                                    <p:column>
+                                        <f:facet name="header">Nome</f:facet>
+                                        <h:outputText value="#{orgR.nome}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">Descrição</f:facet>
+                                        <h:outputText value="#{orgR.descricao}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Endereços</legend>
+                                <p:dataTable value="#{pessoaController.subject.enderecos}" var="enderecoR"
+                                             id="tabelaEndereco">
+                                    <p:column>
+                                        <f:facet name="header">Cidade</f:facet>
+                                        <h:outputText value="#{enderecoR.localidade}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">País</f:facet>
+                                        <h:outputText value="#{enderecoR.pais}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">CEP</f:facet>
+                                        <h:outputText value="#{enderecoR.codigoPostal}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Acreditações</legend>
+                                <p:dataTable value="#{pessoaController.subject.certificados}" var="certificadoR"
+                                             id="tabelaCertificado">
+                                    <p:column>
+                                        <f:facet name="header">Competência</f:facet>
+                                        <h:outputText value="#{certificadoR.competenciaRequerida}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">Categoria</f:facet>
+                                        <h:outputText value="#{certificadoR.categoria}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">Nível</f:facet>
+                                        <h:outputText value="#{certificadoR.nivelEducacional}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:commandButton action="#{pessoaController.printCertificado(certificadoR.id)}"
+                                                         value="Visualizar">
+                                        </h:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </fieldset>
+                        </fieldset>
+                    </div>
+
+                    <p:separator/>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Excluir" process="@this"
+                                         action="#{pessoaController.delete()}"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="#{pessoaController.listSubjects()}"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

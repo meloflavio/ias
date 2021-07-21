@@ -1,0 +1,43 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+solidity/solc/*
+solidity/compiled/*
+solidity/web3j*/
+solidity/web3j*.tar
+solidity/node_modules/*
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/src/main/resources/upload/*.*
+/src/main/resources/upload/docs/*.*
+!/src/main/resources/upload/nodelete/.nomedia
+!/src/main/resources/upload/docs/nodelete/.nomedia
+
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/

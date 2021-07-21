@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/index.xhtml">
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{cursoController.listSubjects()}" />
+    </ui:define>
+    <ui:define name="body">
+        <h:form>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+
+
+                    <p:dataTable id="subjectTable"
+                                 var="subjectR"
+                                 value="#{cursoController.subjectList}"
+                                 selectionMode="multiple"
+                                 selection="#{cursoController.subjectSelected}"
+                                 rowKey="#{subjectR.id}"
+                                 paginator="true"
+                                 emptyMessage="Nenhum registro encontrado"
+                    >
+
+                        <p:column headerText="Código" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.id}" />
+                        </p:column>
+
+                        <p:column headerText="Nome" styleClass="col-md-5">
+                            <h:outputText value="#{subjectR.nome}" />
+                        </p:column>
+                        <p:column styleClass="col-md-3">
+                            <h:commandButton action = "#{cursoController.modify(subjectR.id)}" value="Editar" icon="fa fa-pencil" class="btn btn-primary">
+                            </h:commandButton>
+                            <h:commandButton action = "#{cursoController.show(subjectR.id)}"  value="Exibir" icon="fa fa-file" class="btn btm-warning">
+                            </h:commandButton>
+
+                        </p:column>
+
+                    </p:dataTable>
+                    <p:separator/>
+
+                    <p:commandButton action="#{cursoController.create()}" ajax="false" icon="fa fa-plus"
+                                     value="Novo" styleClass="btn-primary"/>
+                    <p:spacer width="5"/>
+                    <p:commandButton value="Excluir Selecionado(s)" icon="fa fa-trash" styleClass="btn-danger"
+                                     action="#{cursoController.deleteSelected()}"
+                                     process="@form" update="@form"/>
+                    <p:spacer width="5"/>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

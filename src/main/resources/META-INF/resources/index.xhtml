@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/admin.xhtml">
+    <link rel="stylesheet" href="/webjars/font-awesome/css/font-awesome.min.css"></link>
+    <ui:define name="head">
+        <title>Sistema de Acreditação</title>
+    </ui:define>
+
+    <ui:define name="logo">
+        IAS - Sistema de Acreditação
+    </ui:define>
+    <ui:define name="menu">
+        <ui:include src="/includes/menu.xhtml"/>
+    </ui:define>
+
+    <ui:define name="top-menu">
+        <ui:include src="/includes/top-bar.xhtml"/>
+    </ui:define>
+
+    <ui:define name="title">
+        Sistema Internacional para Acreditação de Profissionais de Saúde
+    </ui:define>
+    <ui:define name="body">
+        <h:form>
+            <f:event type="preRenderView" listener="#{organizacaoController.clean()}"/>
+            <f:event type="preRenderView" listener="#{pessoaController.clean()}"/>
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:focus/>
+            <div class=" box box-primary ui-g-12 ui-fluid">
+                <p:panel styleClass="card" header="Bem vindo ao IAS">
+
+                    <p:spacer height="15"/>
+<!--                    <div>-->
+<!--                        <p:fieldset>-->
+<!--                            <legend style="text-align: center"><i class="fa fa-plus-square"></i> CADASTROS</legend>-->
+<!--                            <p:panelGrid id="cadastroPanel" columns="2" layout="grid"-->
+<!--                                         columnClasses="ui-md-6,ui-md-6"-->
+<!--                                         contentStyleClass="ui-fluid">-->
+<!--                                <p:commandButton icon="fa fa-user"-->
+<!--                                                 value="Cadastrar Profissional"-->
+<!--                                                 action="pessoa/new.jsf?faces-redirect=true"-->
+<!--                                                 styleClass="btn-primary ui-md-6"/>-->
+<!--                            </p:panelGrid>-->
+
+<!--                        </p:fieldset>-->
+<!--                    </div>-->
+<!--                    <p:spacer height="25"/>-->
+                    <div>
+                        <p:fieldset>
+                            <legend style="text-align: center"><i class="fa fa-share-square"></i> ACREDITAÇÃO</legend>
+                            <p:panelGrid id="acreditacaoPanel" columns="2" layout="grid"
+                                         columnClasses="ui-md-6,ui-md-6"
+                                         contentStyleClass="ui-fluid">
+                                <p:commandButton icon="fa fa-share-square"
+                                                 value="Solicitar Acreditação"
+                                                 action="solicitacao_acreditacao/new.jsf?faces-redirect=true"
+                                                 styleClass="btn-secondary"/>
+                                <p:commandButton icon="fa fa-search"
+                                                 value="Consultar Resultado"
+                                                 action="solicitacao_acreditacao/consulta_solicitacao.jsf?faces-redirect=true"
+                                                 styleClass="btn-info"/>
+                            </p:panelGrid>
+                        </p:fieldset>
+                    </div>
+                    <p:spacer height="20"/>
+                    <div>
+                        <p:fieldset>
+                            <legend style="text-align: center"><i class="fa fa-certificate"></i> CERTIFICADOS</legend>
+                            <p:panelGrid id="certficadosPanel" columns="2" layout="grid"
+                                         columnClasses="ui-md-6,ui-md-6"
+                                         contentStyleClass="ui-fluid">
+                                <p:commandButton icon="fa fa-check-circle"
+                                                 value="Verificar um Certificado"
+                                                 action="certificado/validar_certificado.jsf?faces-redirect=true"
+                                                 styleClass="btn-secondary"/>
+                                <p:commandButton icon="fa fa-search"
+                                                 value="Consultar Certificados"
+                                                 action="certificado/consulta_certificado.jsf?faces-redirect=true"
+                                                 styleClass="btn-info"/>
+                            </p:panelGrid>
+
+                        </p:fieldset>
+                    </div>
+                    <p:spacer height="20"/>
+
+                    <div>
+                        <p:fieldset>
+                            <legend style="text-align: center"><i class="fa fa-gears"></i> ADMINISTRAÇÃO</legend>
+                            <p:panelGrid id="adminstraçãoPanel" columns="4" layout="grid"
+                                         columnClasses="ui-md-3,ui-md-3,ui-md-3,ui-md-3"
+                                         contentStyleClass="ui-fluid">
+                                <p:commandButton icon="fa fa-user"
+                                                 value="Cadastrar Profissional"
+                                                 action="pessoa/new.jsf?faces-redirect=true"
+                                                 styleClass="btn-primary ui-md-6"/>
+
+                                <p:commandButton icon="fa fa-building"
+                                                 value="Cadastrar Organização"
+                                                 action="organizacao/new.jsf?faces-redirect=true"
+                                                 styleClass="btn-primary ui-md-6"/>
+
+                                <p:commandButton icon="fa fa-list"
+                                                 value="Grupo de Avaliação"
+                                                 action="turma/list.jsf?faces-redirect=true"
+                                                 styleClass="btn-primary ui-md-6"/>
+
+                                <p:commandButton icon="fa fa-bar-chart"
+                                                 value="Análises de solicitação"
+                                                 action="solicitacao_acreditacao/list_filter.jsf?faces-redirect=true"
+                                                 styleClass="btn-primary ui-md-6"/>
+                            </p:panelGrid>
+
+                        </p:fieldset>
+                    </div>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
